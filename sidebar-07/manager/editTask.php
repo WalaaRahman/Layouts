@@ -5,9 +5,26 @@ require '../helpers/validator.php';
 
 require '../layouts/header.php';
 
+# Fetch Task Old Data....
 
-$sql="select * from users where role_id=3 ";
+$task_id=$_GET['id'];
+
+# validate id 
+if(!validate($task_id,'int')){
+    echo "Invalid ID";
+    header("Location: index.php");
+}
+
+# Query to Fetch Previous Task Data
+
+$sql="select * from task where id=$task_id ";
+$task_op=mysqli_query($con,$sql);
+$prevData=mysqli_fetch_assoc($task_op);
+
+# Fetch User Data (Employees) ... 
+$sql="select * from users where role_id=3";
 $emp_op=mysqli_query($con,$sql);
+
 
 // var_dump($op);
 // while($data=mysqli_fetch_assoc($op)){
@@ -25,8 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     $deadLine    =  $_POST['deadline'];
     $assignedTo  =  $_POST['emp_id'];
 
-    // echo $title;
-    // exit;
 
     # Image Details ..... 
     $ImageTmp   =  $_FILES['image']['tmp_name'];
@@ -39,10 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
 
     $errors=[];
 
-    #Title
+    // #Title
     // if(!validate($title,'empty')){
-    //    $errors['title'] ="Title Field Required";
+    //    $errors['title'] = " Title Field Required";
+    //  }else{
+    //      echo "Hello";
     //  }
+   
   
 
     # Content
@@ -80,21 +98,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
        print_r($errors);
 
     }else{
-        $ImageName = rand(1,100).time().'.'.$TypeArray[1];
+        if(validate($ImageName,'empty')){
+
+            $ImageName = rand(1,100).time().'.'.$TypeArray[1];
  
              $desPath = './uploads/'.$ImageName;
+
+             if(move_uploaded_file($ImageTmp,$desPath)){
+                  unlink('./uploads/'.$_POST['prevPhoto']);
+                
+                }
+                else{
+                    $ImageName=$_POST['prevPhoto'];
+                }
+
+        }
+        
     
-               if(move_uploaded_file($ImageTmp,$desPath)){
+               
                   
                     // code .... 
                     $deadLine = strtotime($deadLine);
                     $time=time();
-                    $sql = "insert into task (title,content,deadline,assignedTo,photo,createdBy,createDate) values ('$title','$content','$deadLine',$assignedTo,'$ImageName',4,'$time')";
+                    $sql = "update task set title='$title', content='$content' , deadline='$deadLine' , assignedTo=$assignedTo , photo='$ImageName' , createdBy=4 , createDate='$time' where id = $task_id";
                     $op  = mysqli_query($con,$sql);
 
-                        var_dump($op);
-                        echo mysqli_error($con);
-                        exit();
+                        // echo mysqli_error($con);
+                        // exit();
 
         
                     if($op){
@@ -105,9 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
                     $_SESSION['Message'] = ['Error Inserting Data Try Again'];
                     }
 
-               }else{
-                   $_SESSION['Message'] = ['Error Try Again'];
-               }  
+              
     }
 
 
@@ -142,7 +170,7 @@ require '../layouts/navbar.php';
             <!-- Page Content  -->
             
             <div class="container">
-                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post"
+                    <form action="editTask.php?id=<?php echo $prevData['id']; ?>" method="post"
                         enctype="multipart/form-data">
 
 
@@ -150,14 +178,16 @@ require '../layouts/navbar.php';
                         <div class="form-group">
                             <label for="exampleInputEmail1">Title</label>
                             <input type="text" name="title" class="form-control" id="exampleInputName"
-                                aria-describedby="" placeholder="Enter Title">
+                                aria-describedby="" placeholder="Enter Title"
+                                value="<?php echo $prevData['title'];?>">
                         </div>
 
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Content</label>
                             <input type="text" name="content" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp" placeholder="Content">
+                                aria-describedby="emailHelp" placeholder="Content"
+                                value="<?php echo $prevData['content'];?>">
                         </div>
 
                       
@@ -165,7 +195,7 @@ require '../layouts/navbar.php';
                         <div class="form-group">
                             <label for="exampleInputEmail1">Deadline</label>
                             <input type="date" name="deadline" class="form-control" id="exampleInputName"
-                              >
+                            value="<?php echo date('Y-m-d',$prevData['deadline']);?>">
                         </div>
 
                        
@@ -178,7 +208,7 @@ require '../layouts/navbar.php';
                                     while($data = mysqli_fetch_assoc($emp_op)){ 
                                 ?>
 
-                                <option value="<?php echo $data['id'];?>"> <?php echo $data['name']; ?> </option>
+                                <option value="<?php echo $data['id'];?>" <?php if($data['id'] === $prevData['assignedTo']){echo "selected";}?>> <?php echo $data['name']; ?> </option>
 
                                 <?php } ?>
                             </select>
@@ -188,11 +218,15 @@ require '../layouts/navbar.php';
                         <div class="form-group">
                             <label for="exampleInputEmail1">Image </label>
                             <input type="file" name="image">
+                            <br>
+                            <img src="./uploads/<?php echo $prevData['photo'];?>" width="100 px">
+
                         </div>
+                        <input type="hidden" value="<?php echo $prevData['photo'];?>" name="prevPhoto">
 
 
 
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
 

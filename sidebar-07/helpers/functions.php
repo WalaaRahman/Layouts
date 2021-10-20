@@ -14,5 +14,11 @@
         }
     }
 
-   
+
+    
+function url($url){
+
+    return "http://".$_SERVER['HTTP_HOST']."/TaskManagement/layouts/sidebar-07/".$url;
+}
+// http://localhost/TaskManagement/layouts/sidebar-07/
 ?> 

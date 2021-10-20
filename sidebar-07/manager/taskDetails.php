@@ -1,8 +1,9 @@
 <?php 
 require '../helpers/dbConnection.php';
 require '../layouts/header.php';
+$task_id=$_GET['id'];
 
-$sql  =  "select * from task ";
+$sql  =  "select * from task where id=$task_id  ";
 $op   =  mysqli_query($con,$sql);
 
 // while($data=mysqli_fetch_assoc($op)){
@@ -13,6 +14,7 @@ $op   =  mysqli_query($con,$sql);
 //     echo '<br>';
 
 // }
+// exit;
 
 ?>
 
@@ -58,14 +60,13 @@ require '../layouts/navbar.php';
                             <div class="card-block px-3">
                                 <h4 class="card-title"><?php echo $data['title'];?></h4>
                                 <h5 class="card-text" style=" text-decoration: underline; text-decoration-color: #FFC312;"><?php echo "Deadline : ".$deadLine;?></h5>
-                                <p class="card-text"><?php echo substr($data['content'],0,40).' ...';?>
-                                <a href="taskDetails.php?id=<?php echo $data['id']; ?>">Read more</a>
+                                <p class="card-text"><?php echo $data['content'];?>
+                                
                                 </p>
-                                <span></span>
                                 
                                 <br>
-                                <!-- <a href="#" class="btn btn-primary mb-3" >Edit</a>
-                                <a href="#" class="btn btn-danger mb-3" >Delete</a> -->
+                                <a href="editTask.php?id=<?php echo $task_id ?>" class="btn btn-primary mb-3" >Edit</a>
+                                <a href="deleteTask.php?id=<?php echo $task_id ?>" class="btn btn-danger mb-3" >Delete</a>
 
 
                             </div>

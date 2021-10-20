@@ -3,7 +3,7 @@
 session_start();
 
 $server="localhost";
-$dbName="task_management";
+$dbName="taskmanagement_2";
 $userName="root";
 $password="";
 
