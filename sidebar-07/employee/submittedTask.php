@@ -7,7 +7,7 @@ require '../layouts/header.php';
 
 $emp_id=$_SESSION['user']['id'];
 
-$sql="select * from task where assignedTo = $emp_id ";
+$sql="select * from task where assignedTo = $emp_id and endDate > 0";
 $op=mysqli_query($con,$sql);
 
 

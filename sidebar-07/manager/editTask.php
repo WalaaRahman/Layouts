@@ -55,11 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     $errors=[];
 
     // #Title
-    // if(!validate($title,'empty')){
-    //    $errors['title'] = " Title Field Required";
-    //  }else{
-    //      echo "Hello";
-    //  }
+    if(!validate($title,'empty')){
+       $errors['title'] = " Title Field Required";
+     }
    
   
 
@@ -102,10 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
 
             $ImageName = rand(1,100).time().'.'.$TypeArray[1];
  
-             $desPath = './uploads/'.$ImageName;
+             $desPath = '../assets/uploads/'.$ImageName;
 
              if(move_uploaded_file($ImageTmp,$desPath)){
-                  unlink('./uploads/'.$_POST['prevPhoto']);
+                  unlink('../assets/uploads/'.$_POST['prevPhoto']);
                 
                 }
                 else{
@@ -219,7 +217,7 @@ require '../layouts/navbar.php';
                             <label for="exampleInputEmail1">Image </label>
                             <input type="file" name="image">
                             <br>
-                            <img src="./uploads/<?php echo $prevData['photo'];?>" width="100 px">
+                            <img src="../assets/uploads/<?php echo $prevData['photo'];?>" width="100 px">
 
                         </div>
                         <input type="hidden" value="<?php echo $prevData['photo'];?>" name="prevPhoto">

@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     $deadLine    =  $_POST['deadline'];
     $assignedTo  =  $_POST['emp_id'];
 
+    $creaderBy   =  $_SESSION['user']['id'];
+
     // echo $title;
     // exit;
 
@@ -40,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     $errors=[];
 
     #Title
-    // if(!validate($title,'empty')){
-    //    $errors['title'] ="Title Field Required";
-    //  }
+    if(!validate($title,'empty')){
+       $errors['title'] ="Title Field Required";
+     }
   
 
     # Content
@@ -82,19 +84,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     }else{
         $ImageName = rand(1,100).time().'.'.$TypeArray[1];
  
-             $desPath = './uploads/'.$ImageName;
+             $desPath = '../assets/uploads/'.$ImageName;
     
                if(move_uploaded_file($ImageTmp,$desPath)){
                   
                     // code .... 
                     $deadLine = strtotime($deadLine);
                     $time=time();
-                    $sql = "insert into task (title,content,deadline,assignedTo,photo,createdBy,createDate) values ('$title','$content','$deadLine',$assignedTo,'$ImageName',4,'$time')";
+                    $sql = "insert into task (title,content,deadline,assignedTo,photo,createdBy,createDate) values ('$title','$content','$deadLine',$assignedTo,'$ImageName',$creaderBy,'$time')";
                     $op  = mysqli_query($con,$sql);
 
-                        var_dump($op);
-                        echo mysqli_error($con);
-                        exit();
+                        // var_dump($op);
+                        // echo mysqli_error($con);
+                        // exit();
 
         
                     if($op){

@@ -53,7 +53,7 @@ require '../layouts/navbar.php';
                     <!-- <div class="row "> -->
                     
                         <div class="col-md-4 m-2">
-                            <img src="./uploads/<?php echo $data['photo']?>" class="w-100 h-50">
+                            <img src="../assets/uploads/<?php echo $data['photo']?>" class="w-100 h-50">
                         </div>
                         <div class="col-md-8 px-3">
                            

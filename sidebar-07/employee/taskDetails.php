@@ -1,35 +1,32 @@
-<?php
+<?php 
 require '../helpers/dbConnection.php';
-require '../helpers/functions.php';
-require '../helpers/validator.php';
 require '../layouts/header.php';
+$task_id=$_GET['id'];
 
+$sql  =  "select * from task where id=$task_id  ";
+$op   =  mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($op);
 
-$emp_id=$_SESSION['user']['id'];
+// while($data=mysqli_fetch_assoc($op)){
 
-$sql="select * from task where assignedTo = $emp_id ";
-$op=mysqli_query($con,$sql);
+//     foreach($data as $key => $value){
+//         echo $key.'-->'.$value.',';
+//     }
+//     echo '<br>';
 
-
-
-
-
-
-
-
-
-
-
-
+// }
+// exit;
 
 
 
-
-
-
-
-
-
+// while($data=mysqli_fetch_assoc($op)){
+    // echo mysqli_error($con);
+    // exit;
+//   $deadLine_timeStamp=strtotime($data['deadline']) ;
+//   echo $deadLine_timeStamp.'--->'; 
+$deadLine=date('d-m-Y',$data['deadline']);  
+    // echo $deadLine.'<br>';
+    // exit;
 
 
 
@@ -51,24 +48,10 @@ require '../layouts/sidebar.php';
 require '../layouts/navbar.php';
 
 ?>           
-           
-
-
-
-           <h2 class="mb-4">Tasks</h2>
+            <!-- Page Content  -->
+            <h2 class="mb-4"><?php echo $data['title'];?></h2>
                <div class="container"> 
-                <?php
-                    while($data=mysqli_fetch_assoc($op)){
-                        // echo mysqli_error($con);
-                        // exit;
-                    //   $deadLine_timeStamp=strtotime($data['deadline']) ;
-                    //   echo $deadLine_timeStamp.'--->'; 
-                    $deadLine=date('d-m-Y',$data['deadline']);  
-                        // echo $deadLine.'<br>';
-                        // exit;
-                    
-                    
-                ?>
+              
                 <div class="card m-3 p-3">
                     
                     <!-- <div class="row "> -->
@@ -81,14 +64,13 @@ require '../layouts/navbar.php';
                             <div class="card-block px-3">
                                 <h4 class="card-title"><?php echo $data['title'];?></h4>
                                 <h5 class="card-text" style=" text-decoration: underline; text-decoration-color: #FFC312;"><?php echo "Deadline : ".$deadLine;?></h5>
-                                <p class="card-text"><?php echo substr($data['content'],0,40).' ...';?>
-                                <a href="taskDetails.php?id=<?php echo $data['id']; ?>">Read more</a>
+                                <p class="card-text"><?php echo $data['content'];?>
+                                
                                 </p>
-                                <span></span>
                                 
                                 <br>
-                                <!-- <a href="#" class="btn btn-primary mb-3" >Edit</a>
-                                <a href="#" class="btn btn-danger mb-3" >Delete</a> -->
+                                <a href="startTask.php?id=<?php echo $task_id ?>" class="btn btn-warning mb-3" >Start</a>
+                                <a href="endTask.php?id=<?php echo $task_id ?>" class="btn btn-danger mb-3" >END</a>
 
 
                             </div>
@@ -97,12 +79,8 @@ require '../layouts/navbar.php';
 
                     <!-- </div> -->
                 </div>
-                <?php   }?>
+               
              </div>
-
-
-
-
 
         </div>
 
@@ -111,7 +89,6 @@ require '../layouts/navbar.php';
 require '../layouts/scripts.php';
 
 ?>    
-
 
 
 
