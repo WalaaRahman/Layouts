@@ -1,14 +1,20 @@
 <?php
 require '../helpers/dbConnection.php';
 require '../helpers/functions.php';
+require '../helpers/checkLogin.php';
+
 require '../helpers/validator.php';
 require '../layouts/header.php';
 
 
 $emp_id=$_SESSION['user']['id'];
 
-$sql="select * from task where assignedTo = $emp_id ";
+$sql="select * from task where assignedTo = $emp_id and endDate=0";
 $op=mysqli_query($con,$sql);
+
+$sql2="select * from users where id = $emp_id";;
+$op2=mysqli_query($con,$sql2);
+$emp_data=mysqli_fetch_assoc($op2);
 
 
 
@@ -55,7 +61,7 @@ require '../layouts/navbar.php';
 
 
 
-           <h2 class="mb-4">Tasks</h2>
+           <h2 class="mb-4"><?php echo $emp_data['name'];?></h2>
                <div class="container"> 
                 <?php
                     while($data=mysqli_fetch_assoc($op)){

@@ -1,5 +1,8 @@
 <?php 
 require '../helpers/dbConnection.php';
+require '../helpers/functions.php';
+require '../helpers/checkLogin.php';
+
 require '../layouts/header.php';
 $task_id=$_GET['id'];
 

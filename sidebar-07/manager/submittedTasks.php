@@ -9,10 +9,13 @@ require '../layouts/header.php';
 
 $emp_id=$_SESSION['user']['id'];
 
-$sql="select * from task where assignedTo = $emp_id and endDate > 0";
+$sql="select * from task where endDate > 0";
 $op=mysqli_query($con,$sql);
+// echo mysqli_error($con);
+// exit;
 
-
+// print_r($data=mysqli_fetch_assoc($op));
+// exit;
 
 
 
@@ -50,7 +53,7 @@ require '../layouts/navbar.php';
                         // exit;
                     //   $deadLine_timeStamp=strtotime($data['deadline']) ;
                     //   echo $deadLine_timeStamp.'--->'; 
-                    $deadLine=date('d-m-Y',$data['deadline']);  
+                     $deadLine=date('d-m-Y',$data['deadline']);  
                         // echo $deadLine.'<br>';
                         // exit;
                     

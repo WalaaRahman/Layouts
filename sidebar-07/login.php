@@ -42,6 +42,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     
          $sql = "select * from users where email = '$email' and password = '$password'";
          $op  =  mysqli_query($con,$sql);
+        //  echo mysqli_error($con);
+        //  exit;
     
     
           if(mysqli_num_rows($op) == 1){
@@ -49,6 +51,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             $data = mysqli_fetch_assoc($op);
     
              $_SESSION['user'] = $data;
+
+             $user_role_id  = $_SESSION['user']['role_id'];
+
+            //  echo $user_role_id;
+            //  exit;
+            // var_dump($_SESSION['user']['role_id'] == 1);
+            // exit;
 
              if($_SESSION['user']['role_id'] == 1){
     

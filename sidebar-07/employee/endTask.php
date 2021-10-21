@@ -1,5 +1,8 @@
 <?php 
     require '../helpers/dbConnection.php';
+    require '../helpers/functions.php';
+    require '../helpers/checkLogin.php';
+
 
     $task_id=$_GET['id'];
 
@@ -28,7 +31,7 @@
         echo "Start Task First";
         $_SESSION['Message']="Start Task First";
     }
-    }
+    
 
    
 
